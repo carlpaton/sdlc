@@ -1,6 +1,7 @@
 ---
 issue: <number>
 title: <short title>
+path: full
 status: draft
 ---
 
@@ -19,6 +20,12 @@ Who it is for.
 -
 
 ## Out of scope
+
+-
+
+## Acceptance criteria
+
+Fast path only (`path: fast`). Testable statements that define done, because this intent is the only spec. Remove this section on the full path, where `/design` writes them.
 
 -
 

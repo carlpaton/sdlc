@@ -17,12 +17,24 @@ The steps follow Anthropic's AI-native SDLC playbook (see [Sources](#sources)). 
 | # | Step | Purpose | Output | Mechanisms |
 |---|------|---------|--------|------------|
 | 0 | [Setup](.claude/skills/setup/README.md) | Once per project: record how the code will be built (architecture, testing, conventions) for a new or existing code base | `docs/conventions/`, `docs/decisions/`, `CLAUDE.md` | [`/setup`](.claude/skills/setup/README.md) skill, stack profiles |
-| 1 | [Plan](.claude/skills/plan/README.md) | Capture the idea, problem and scope | `intent/<issue#>-<slug>.md` | Issue form, [`/issue`](.claude/skills/issue/README.md) and [`/plan`](.claude/skills/plan/README.md) skills |
-| 2 | Design | Turn the approved intent into requirements and design, with a clarify pass to resolve ambiguity | `spec.md` | _tbd_ |
+| 1 | [Plan](.claude/skills/plan/README.md) | Capture the idea, problem and scope, and choose the [fast or full path](#fast-and-full-paths) | `intent/<issue#>-<slug>.md` | Issue form, [`/issue`](.claude/skills/issue/README.md) and [`/plan`](.claude/skills/plan/README.md) skills |
+| 2 | [Design](.claude/skills/design/README.md) | Full path only: turn the approved intent into requirements and design, with a clarify pass to resolve ambiguity. Skipped on the fast path. | `spec/<issue#>-<slug>.md`, decision records | [`/design`](.claude/skills/design/README.md) skill |
 | 3 | Build | Write and review a plan and task breakdown before coding, then implement against it | `plan.md`, code | _tbd_ |
 | 4 | Test | Give Claude a way to verify its own work; run continuous evals in CI | tests, CI evals | _tbd_ |
 | 5 | Deploy | Layered AI review of PRs, hooks as approval gates, CI/CD that stops at the production gate | reviewed PR, release | _tbd_ |
 | 6 | Maintain | Trigger Claude from monitoring breaches and scheduled scans; write findings back as new intent | `intent.md` (feeds step 1) | _tbd_ |
+
+### Fast and full paths
+
+Not every change needs a separate design. Plan decides which path a piece of work takes and records it as `path` in the intent.
+
+| | Fast | Full |
+|---|---|---|
+| For | Small work with an obvious outcome | Anything else |
+| Steps | 0 once, then 1, 3, 4, 5, 6 | 0 once, then 1, 2, 3, 4, 5, 6 |
+| Spec | The intent itself, plus acceptance criteria | `spec/<issue#>-<slug>.md` from Design |
+
+Later steps read the spec if one exists, otherwise the intent. When in doubt Plan chooses full, and the product owner can change the path in the PR. See the [Plan README](.claude/skills/plan/README.md#fast-and-full-paths) for the criteria.
 
 ### Notes
 
