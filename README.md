@@ -19,7 +19,7 @@ The steps follow Anthropic's AI-native SDLC playbook (see [Sources](#sources)). 
 | 0 | [Setup](.claude/skills/setup/README.md) | Once per project: record how the code will be built (architecture, testing, conventions) for a new or existing code base | `docs/conventions/`, `docs/decisions/`, `CLAUDE.md` | [`/setup`](.claude/skills/setup/README.md) skill, stack profiles |
 | 1 | [Plan](.claude/skills/plan/README.md) | Capture the idea, problem and scope, and choose the [fast or full path](#fast-and-full-paths) | `intent/<issue#>-<slug>.md` | Issue form, [`/issue`](.claude/skills/issue/README.md) and [`/plan`](.claude/skills/plan/README.md) skills |
 | 2 | [Design](.claude/skills/design/README.md) | Full path only: turn the approved intent into requirements and design, with a clarify pass to resolve ambiguity. Skipped on the fast path. | `spec/<issue#>-<slug>.md`, decision records | [`/design`](.claude/skills/design/README.md) skill |
-| 3 | Build | Write and review a plan and task breakdown before coding, then implement against it | `plan.md`, code | _tbd_ |
+| 3 | [Build](.claude/skills/build/README.md) | Break the spec (or fast-path intent) into tasks and get the plan approved before coding, then implement one task per PR | `tasks/<issue#>-<slug>.md`, task issues, code | [`/build`](.claude/skills/build/README.md) skill |
 | 4 | Test | Give Claude a way to verify its own work; run continuous evals in CI | tests, CI evals | _tbd_ |
 | 5 | Deploy | Layered AI review of PRs, hooks as approval gates, CI/CD that stops at the production gate | reviewed PR, release | _tbd_ |
 | 6 | Maintain | Trigger Claude from monitoring breaches and scheduled scans; write findings back as new intent | `intent.md` (feeds step 1) | _tbd_ |
