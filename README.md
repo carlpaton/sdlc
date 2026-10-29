@@ -14,6 +14,24 @@ Draft list to iterate on. Add, remove, reorder or rename freely. Each step is im
 
 The steps follow Anthropic's AI-native SDLC playbook (see [Sources](#sources)). Each step hands off to the next through a committed markdown file, so every stage is reviewable and machine-readable.
 
+```mermaid
+flowchart TD
+    S0["0 Setup<br/>once per project"] -.->|conventions for all steps| P
+    I(["Idea or request"]) --> P["1 Plan<br/>/issue, /plan"]
+    P --> Q{"Fast or full<br/>path?"}
+    Q -->|full| D["2 Design<br/>/design"]
+    Q -->|fast: intent is the spec| B
+    D --> B["3 Build<br/>/build"]
+    B --> T["4 Test<br/>/test"]
+    T -->|fail: bug issues| B
+    T -.->|wrong criterion| P
+    T -->|pass| R["5 Deploy<br/>/deploy"]
+    R --> M["6 Maintain<br/>/maintain"]
+    M -->|findings become issues| P
+```
+
+Handing work forward is gated by a human approval: a merged PR, a label on the parent issue, or an explicit sign-off per environment. The loops back (failed tests, findings from Maintain) arrive as new issues.
+
 | # | Step | Purpose | Output | Mechanisms |
 |---|------|---------|--------|------------|
 | 0 | [Setup](.claude/skills/setup/README.md) | Once per project: record how the code will be built (architecture, testing, conventions) for a new or existing code base | `docs/conventions/`, `docs/decisions/`, `CLAUDE.md` | [`/setup`](.claude/skills/setup/README.md) skill, stack profiles |
