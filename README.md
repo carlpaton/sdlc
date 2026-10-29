@@ -6,7 +6,7 @@ Each step of the lifecycle is driven by [Claude](https://claude.ai/code) tooling
 
 ## Status
 
-Early stage. The repository is new and the lifecycle steps and the mechanisms behind them have not been defined yet.
+Early stage. Every step (0 to 6) has a first-draft skill, README and template, but none has been run end to end on a real project yet. Expect the skills to change once they are tried. Automation (GitHub Actions, hooks, scheduled runs) is listed as later work in each step's README and is not built.
 
 ## SDLC steps
 
@@ -22,7 +22,7 @@ The steps follow Anthropic's AI-native SDLC playbook (see [Sources](#sources)). 
 | 3 | [Build](.claude/skills/build/README.md) | Break the spec (or fast-path intent) into tasks and get the plan approved before coding, then implement one task per PR | `tasks/<issue#>-<slug>.md`, task issues, code | [`/build`](.claude/skills/build/README.md) skill |
 | 4 | [Test](.claude/skills/test/README.md) | Verify the built work meets every requirement as a whole, with evidence from a fresh-context verifier; add missing acceptance tests and raise issues for failures | `verification/<issue#>-<slug>.md`, acceptance tests, bug issues | [`/test`](.claude/skills/test/README.md) skill |
 | 5 | [Deploy](.claude/skills/deploy/README.md) | Check readiness and review state, prepare the release, and walk the project's deployment procedure with explicit human approval at every environment | `releases/<issue#>-<slug>.md`, reviewed PRs, release | [`/deploy`](.claude/skills/deploy/README.md) skill, `/code-review`, `REVIEW.md` |
-| 6 | Maintain | Trigger Claude from monitoring breaches and scheduled scans; write findings back as new intent | `intent.md` (feeds step 1) | _tbd_ |
+| 6 | [Maintain](.claude/skills/maintain/README.md) | Investigate signals from live systems read-only, triage them (fix now, schedule, dismiss), write them back as issues for Plan, and learn from incidents | issues (feed step 1), `incidents/<date>-<slug>.md`, convention updates | [`/maintain`](.claude/skills/maintain/README.md) skill, `/issue` |
 
 ### Fast and full paths
 
@@ -65,14 +65,28 @@ Rules of thumb from the playbook:
 - Use a skill where advisory is enough and a hook where a policy must always hold.
 - Use a subagent for a scoped job within one task, and parallel sessions for independent tasks.
 
-## Planned structure
-
-- One or more mechanisms per SDLC step, chosen per step
-- Guidance on adopting the template in a new project
-
 ## Usage
 
-To be documented once the first skills exist.
+The skills live in `.claude/skills/`, and each step's README says how it works. Adopting the template in a project means getting those skills and the `.github/ISSUE_TEMPLATE/` forms into that project's repo. How to distribute them (copying, or packaging as a plugin) is not decided yet.
+
+Once per project:
+
+1. `/setup` records the architecture, testing, deployment and operations conventions.
+
+Then for each piece of work, in order:
+
+| Step | Command | Run it when |
+|------|---------|-------------|
+| 1 Plan | `/issue`, then `/plan <issue>` | Someone has an idea or request |
+| 2 Design | `/design <issue>` | The intent is accepted and on the full path |
+| 3 Build | `/build <issue>` | The spec (or fast-path intent) is accepted |
+| 4 Test | `/test <issue>` | The parent issue is labelled `built` |
+| 5 Deploy | `/deploy <issue>` | The parent issue is labelled `verified` |
+| 6 Maintain | `/maintain` | A live system raises a signal. Findings come back through step 1. |
+
+Each skill checks its prerequisites and tells you which skill to run if one is missing.
+
+Progress shows up as labels on the parent issue: `accepted`, `designed`, `planned`, `built`, `verified`, `released`.
 
 ## Sources
 

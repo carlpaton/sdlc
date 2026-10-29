@@ -68,6 +68,24 @@ Defaults:
 - Rollback means redeploying the previous version. Database changes are written to be backward compatible with it.
 - Each release has a health check and a smoke test, and the release record keeps their output.
 
+## Operations
+
+Record in `docs/conventions/operations.md`. Ask:
+
+1. **Observability.** Where do logs, metrics and traces go, and who can read them?
+2. **Normal and thresholds.** What does healthy look like (error rate, latency, queue depth, resource use), and which values should raise an alert?
+3. **Severity tiers.** How are issues graded, and what response does each tier need?
+4. **Ownership.** Who triages, who is on call, and how are they reached?
+5. **Live-system access.** What may be read, and what may never be changed without going through a release?
+6. **Scheduled checks.** Which run on a schedule: dependency and security scans, health checks, backup restores?
+
+Defaults:
+
+- Structured logs with a correlation id, health endpoints, and alerts on error rate and latency.
+- Three tiers: service down or data loss, degraded, and minor. The first needs an immediate response.
+- Read access to logs and metrics is open to the team. Changes to a live system go through a release.
+- A scheduled dependency and security scan, with findings raised as issues.
+
 ## Enforcement ideas
 
 Not applied by `/setup` in v1. Note them in the conventions so they can be added later:

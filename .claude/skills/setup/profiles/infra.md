@@ -81,6 +81,26 @@ Defaults:
 - A follow-up `terraform plan` shows no changes once an apply is done.
 - Rollback is reverting the change and applying again. Anything destructive or irreversible is called out in the plan review.
 
+## Operations
+
+Record in `docs/conventions/operations.md`. Ask:
+
+1. **Drift.** How is it detected that real resources no longer match the code: a scheduled plan, or by hand?
+2. **Cost.** What is the expected spend, and what deviation should be investigated?
+3. **Expiry.** Which secrets, certificates and credentials expire, where is the rotation procedure written, and who is reminded?
+4. **Backups.** What is backed up, how often, and how is a restore proved?
+5. **Availability and capacity.** What is monitored for the resources managed here?
+6. **Severity tiers and ownership.** How are issues graded, and who triages?
+7. **Live-system access.** What may be read, and what may never be changed outside a reviewed apply?
+
+Defaults:
+
+- A scheduled `terraform plan` per environment that reports a non-empty plan as drift, read-only.
+- Spend compared against the expected monthly cost, with a deviation threshold agreed in advance.
+- Each expiring credential has a recorded due date and a written rotation procedure.
+- Backups have a periodic restore test, with the result recorded.
+- Read access is open to the team. Any change to a live environment goes through a reviewed plan and an approved apply.
+
 ## Enforcement ideas
 
 Not applied by `/setup` in v1. Note them in the conventions so they can be added later:

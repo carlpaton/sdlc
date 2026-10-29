@@ -39,6 +39,7 @@ Write these in the project, show the user the result, and get a yes before commi
 - `docs/conventions/architecture.md`: the architecture style and structure.
 - `docs/conventions/testing.md`: what tests look like, where they live, and how to run all of them and a single one.
 - `docs/conventions/deployment.md`: the environments and their order, how a release is made (pipeline or manual), who approves each environment, the pre-flight list, the post-deploy checks, and the rollback. `/deploy` depends on it.
+- `docs/conventions/operations.md`: what is monitored and where logs and metrics live, what normal looks like and the thresholds that matter, the severity tiers, who owns triage, and what may be read or changed in a live system. `/maintain` depends on it.
 - `docs/conventions/<other>.md`: any further topic the profile covers, such as language, branching or CI.
 - `docs/decisions/NNNN-<slug>.md`: a short decision record (context, decision, consequences) for each significant choice, so it is not reversed without knowing why.
 - `CLAUDE.md`: create it, or add to it if it exists. Import the conventions with `@docs/conventions/<file>.md` and list the build, lint and test commands. Keep it short and do not duplicate the conventions.
