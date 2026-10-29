@@ -1,0 +1,12 @@
+{
+  "name": "infra",
+  "version": "0.1.0",
+  "description": "Scaffold Azure Terraform for a containerised web app or console worker for UAT and prod, with optional blob storage, Foundry AI models and PostgreSQL.",
+  "author": {
+    "name": "Carl Paton",
+    "url": "https://github.com/carlpaton"
+  },
+  "repository": "https://github.com/carlpaton/skills",
+  "license": "MIT",
+  "keywords": ["terraform", "azure", "infrastructure", "container-apps"]
+}

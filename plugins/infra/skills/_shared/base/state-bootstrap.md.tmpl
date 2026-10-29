@@ -1,0 +1,23 @@
+## {{service}}, {{env}}
+
+Terraform cannot create its own backend, so create it once by hand before the first `terraform init`.
+
+```bash
+az login
+az account set --subscription <subscription-id>
+az group create -n {{prefix}}-{{service}}-{{env}}-backend-rg -l {{location_cli}} \
+  --tags environment={{env}} created_via=portal created_by={{created_by}}
+az storage account create -n {{prefix}}{{backend_hex}} -g {{prefix}}-{{service}}-{{env}}-backend-rg -l {{location_cli}} \
+  --sku Standard_LRS --allow-blob-public-access false \
+  --tags environment={{env}} created_via=portal created_by={{created_by}}
+az storage container create -n terraform --account-name {{prefix}}{{backend_hex}} --auth-mode login
+```
+
+These names must match the `backend "azurerm"` block in `{{dir}}/setup.tf`.
+
+Then supply the required variables without committing them, for example in a git-ignored `terraform.tfvars` or as `TF_VAR_subscription_id`{{extra_secret_vars}}:
+
+```bash
+terraform -chdir={{dir}} init
+terraform -chdir={{dir}} plan
+```

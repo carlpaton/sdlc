@@ -1,0 +1,21 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "4.14.0"
+    }
+  }
+
+  # Created by hand before the first init, see docs/state-bootstrap.md
+  backend "azurerm" {
+    resource_group_name  = "{{prefix}}-{{service}}-{{env}}-backend-rg"
+    storage_account_name = "{{prefix}}{{backend_hex}}"
+    container_name       = "terraform"
+    key                  = "terraform.tfstate"
+  }
+}
+
+provider "azurerm" {
+  features {}
+  subscription_id = var.subscription_id
+}

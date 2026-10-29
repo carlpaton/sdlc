@@ -1,0 +1,48 @@
+variable "env_id" {
+  type        = string
+  description = "The environment id"
+  default     = "{{env}}"
+}
+
+variable "created_via" {
+  type        = string
+  description = "How the resource was created"
+  default     = "terraform"
+}
+
+variable "created_by" {
+  type        = string
+  description = "Development company shortcode to identify resources"
+  default     = "{{created_by}}"
+}
+
+variable "location" {
+  type        = string
+  description = "The Azure resources location"
+  default     = "{{location}}"
+}
+
+variable "subscription_id" {
+  type        = string
+  description = "The Azure subscription id"
+}
+
+variable "container_min_replicas" {
+  type        = number
+  description = "Minimum container app replicas"
+  default     = 1
+}
+
+variable "container_max_replicas" {
+  type        = number
+  description = "Maximum container app replicas"
+  default     = {{max_replicas}}
+}
+
+locals {
+  tags = {
+    environment = var.env_id
+    created_via = var.created_via
+    created_by  = var.created_by
+  }
+}

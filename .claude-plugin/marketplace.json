@@ -8,10 +8,26 @@
   "plugins": [
     {
       "name": "sdlc",
-      "source": "./",
+      "source": "./plugins/sdlc",
       "description": "A reusable, AI-first SDLC: setup, plan, design, build, test, deploy and maintain.",
       "category": "workflow",
-      "keywords": ["sdlc", "workflow", "planning", "spec-driven"]
+      "keywords": [
+        "sdlc",
+        "workflow",
+        "planning",
+        "spec-driven"
+      ]
+    },
+    {
+      "name": "infra",
+      "source": "./plugins/infra",
+      "description": "Scaffold Azure Terraform for a container web app or console worker, with optional blob, Foundry and PostgreSQL.",
+      "category": "infrastructure",
+      "keywords": [
+        "terraform",
+        "azure",
+        "infrastructure"
+      ]
     }
   ]
 }

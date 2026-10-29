@@ -1,0 +1,14 @@
+
+variable "model_deployments" {
+  type = map(object({
+    format   = string
+    model    = string
+    version  = string
+    sku      = string
+    capacity = number
+  }))
+  description = "Model deployments, keyed by deployment name. Check the model is available in the region and subscription."
+  default = {
+{{model_entries}}
+  }
+}

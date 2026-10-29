@@ -1,0 +1,10 @@
+resource "azurerm_container_registry" "{{prefix}}-acr" {
+  location                      = azurerm_resource_group.{{prefix}}-rg.location
+  name                          = "{{prefix}}{{service}}registry${var.env_id}" # globally unique, alphanumeric only
+  resource_group_name           = azurerm_resource_group.{{prefix}}-rg.name
+  sku                           = "Basic"
+  admin_enabled                 = true # allows credentials to access
+  public_network_access_enabled = true # need to access from github actions
+
+  tags = local.tags
+}

@@ -1,0 +1,18 @@
+
+variable "psql_admin_pass" {
+  type        = string
+  description = "The Admin PostgreSQL Server password"
+  sensitive   = true
+}
+
+variable "psql_admin_user" {
+  type        = string
+  description = "The Admin PostgreSQL Server user"
+  default     = "{{prefix}}_psql_admin"
+}
+
+variable "psql_sku_name" {
+  type        = string
+  description = "The PostgreSQL Flexible Server SKU"
+  default     = "{{psql_sku}}"
+}

@@ -30,7 +30,7 @@ Once merged, the plan is authoritative. Running `/build <issue-number>` when the
 
 ## Boundary with Test
 
-Build writes the tests for each task alongside its code, as the conventions describe. [Step 4](../../../README.md#sdlc-steps) covers verifying the work as a whole: acceptance criteria end to end, and continuous checks in CI.
+Build writes the tests for each task alongside its code, as the conventions describe. [Step 4](../../README.md#sdlc-steps) covers verifying the work as a whole: acceptance criteria end to end, and continuous checks in CI.
 
 ## Mechanisms
 

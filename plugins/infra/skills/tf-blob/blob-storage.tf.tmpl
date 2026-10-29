@@ -1,0 +1,17 @@
+resource "azurerm_storage_account" "{{prefix}}-asa" {
+  name                     = "{{prefix}}{{blob_hex}}" # must be globally unique, lowercase only, max 24 characters
+  resource_group_name      = azurerm_resource_group.{{prefix}}-rg.name
+  location                 = azurerm_resource_group.{{prefix}}-rg.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  allow_nested_items_to_be_public = false # No anonymous blob access
+
+  tags = local.tags
+}
+
+resource "azurerm_storage_container" "{{prefix}}-asc" {
+  name                  = "{{prefix}}-files"
+  storage_account_id    = azurerm_storage_account.{{prefix}}-asa.id
+  container_access_type = "private" # No public read access to blobs in that container
+}

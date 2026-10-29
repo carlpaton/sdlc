@@ -1,0 +1,9 @@
+resource "azurerm_log_analytics_workspace" "{{prefix}}-law" {
+  location            = azurerm_resource_group.{{prefix}}-rg.location
+  resource_group_name = azurerm_resource_group.{{prefix}}-rg.name
+  name                = "{{prefix}}-{{service}}-${var.env_id}-law"
+  sku                 = "PerGB2018"
+  retention_in_days   = 30 # 7 free, or 30 to 730
+
+  tags = local.tags
+}

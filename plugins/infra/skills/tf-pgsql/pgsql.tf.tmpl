@@ -1,0 +1,23 @@
+resource "azurerm_postgresql_flexible_server" "{{prefix}}-psql" {
+  name                   = "{{prefix}}-{{service}}-${var.env_id}-psql"
+  resource_group_name    = azurerm_resource_group.{{prefix}}-rg.name
+  location               = azurerm_resource_group.{{prefix}}-rg.location
+  administrator_login    = var.psql_admin_user
+  administrator_password = var.psql_admin_pass
+
+  sku_name   = var.psql_sku_name
+  storage_mb = 32768 # Minimum storage
+  version    = "16"
+
+  backup_retention_days        = 7
+  geo_redundant_backup_enabled = false
+
+  tags = local.tags
+}
+
+resource "azurerm_postgresql_flexible_server_firewall_rule" "{{prefix}}-psql-firewall" {
+  name             = "{{prefix}}-{{service}}-${var.env_id}-azure-services"
+  server_id        = azurerm_postgresql_flexible_server.{{prefix}}-psql.id
+  start_ip_address = "0.0.0.0" # Allows connections from any Azure service, including other customers' subscriptions. Tighten before production holds real data.
+  end_ip_address   = "0.0.0.0"
+}

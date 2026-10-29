@@ -1,6 +1,6 @@
 # Releasing
 
-The skills ship as a Claude Code plugin. The version lives in one place, `version` in [`.claude-plugin/plugin.json`](../.claude-plugin/plugin.json). Claude Code uses that field to decide whether users get an update, so a change only reaches users once the version is bumped. A GitHub release makes the version visible on GitHub and carries the notes.
+Each group of skills ships as its own Claude Code plugin under `plugins/<name>/`. A plugin's version lives in one place, `version` in `plugins/<name>/.claude-plugin/plugin.json`. Plugins are versioned and released independently. Claude Code uses that field to decide whether users get an update, so a change only reaches users once the version is bumped. A GitHub release makes the version visible on GitHub and carries the notes.
 
 `.claude-plugin/marketplace.json` has no version. Leave it that way so there is one place to bump.
 
@@ -16,25 +16,25 @@ Use [semantic versioning](https://semver.org). While the project is early stage,
 
 ## Steps
 
-1. Bump `version` in `.claude-plugin/plugin.json`.
+1. Bump `version` in `plugins/<name>/.claude-plugin/plugin.json`.
 2. Check the plugin still validates:
 
    ```
-   claude plugin validate .
+   claude plugin validate plugins/<name>
    ```
 
 3. Commit and push to `main`:
 
    ```
-   git add .claude-plugin/plugin.json
-   git commit -m "Release v0.1.0"
+   git add plugins/<name>/.claude-plugin/plugin.json
+   git commit -m "Release <name> v0.1.0"
    git push origin main
    ```
 
 4. Create the tag and release:
 
    ```
-   gh release create v0.1.0 --title "v0.1.0" --generate-notes
+   gh release create <name>-v0.1.0 --title "<name> v0.1.0" --generate-notes
    ```
 
    This tags the latest commit on `main`, so push first. `--generate-notes` builds the notes from the PRs and commits since the previous release. Add `--prerelease` while the project is early stage.
@@ -43,16 +43,16 @@ Use [semantic versioning](https://semver.org). While the project is early stage,
 
    ```
    claude plugin marketplace update carlpaton
-   claude plugin update sdlc@carlpaton
+   claude plugin update <name>@carlpaton
    ```
 
-The tag is `v` plus the version in `plugin.json`, so `0.1.0` is tagged `v0.1.0`.
+The tag is the plugin name, `-v`, and the version in its `plugin.json`, so `0.1.0` of `infra` is tagged `infra-v0.1.0`.
 
 ## Fixing a mistake
 
-- **Wrong notes:** `gh release edit v0.1.0 --notes "..."`.
+- **Wrong notes:** `gh release edit <name>-v0.1.0 --notes "..."`.
 - **Wrong version released:** do not move or reuse the tag, because users may already have it. Bump the patch version and release again.
-- **Release made by accident:** `gh release delete v0.1.0 --cleanup-tag`, and only if nobody has installed it yet.
+- **Release made by accident:** `gh release delete <name>-v0.1.0 --cleanup-tag`, and only if nobody has installed it yet.
 
 ## Later
 
