@@ -17,7 +17,7 @@ claude plugin marketplace add carlpaton/sdlc
 claude plugin install sdlc@carlpaton
 ```
 
-Update with `claude plugin update sdlc@carlpaton`. Releases are versioned in [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json).
+Update with `claude plugin update sdlc@carlpaton`. Releases are versioned in [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json), see [how to release](docs/release.md).
 
 A plugin cannot install the issue forms. Copy [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE) into your project's repo so `/issue` and `/plan` have the forms they follow.
 
