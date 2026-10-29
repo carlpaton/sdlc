@@ -2,6 +2,25 @@
 
 Claude Code skills that take a piece of work from idea to production: setup, plan, design, build, test, deploy and maintain. Each step is a skill that writes its result to a committed markdown file, so the next step (and a human reviewer) can pick it up.
 
+## Installation
+
+The skills ship as a Claude Code plugin named `sdlc`. In Claude Code (2.1.275 or later):
+
+```
+/plugin install sdlc --marketplace carlpaton/sdlc
+```
+
+Or in two steps, on any version:
+
+```
+claude plugin marketplace add carlpaton/sdlc
+claude plugin install sdlc@carlpaton
+```
+
+Update with `claude plugin update sdlc@carlpaton`. Releases are versioned in [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json).
+
+A plugin cannot install the issue forms. Copy [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE) into your project's repo so `/issue` and `/plan` have the forms they follow.
+
 ## SDLC steps
 
 Draft list to iterate on. Add, remove, reorder or rename freely. Each step is implemented by whichever mechanism fits best, which may be a skill, a subagent, a hook, an MCP server or a mix.
@@ -26,15 +45,15 @@ flowchart TD
 
 Handing work forward is gated by a human approval: a merged PR, a label on the parent issue, or an explicit sign-off per environment. The loops back (failed tests, findings from Maintain) arrive as new issues.
 
-| # | Step | Purpose | Output | Mechanisms |
-|---|------|---------|--------|------------|
-| 0 | [Setup](skills/setup/README.md) | Once per project: record how the code will be built (architecture, testing, conventions) for a new or existing code base | `docs/conventions/`, `docs/decisions/`, `CLAUDE.md` | [`/setup`](skills/setup/README.md) skill, stack profiles |
-| 1 | [Plan](skills/plan/README.md) | Capture the idea, problem and scope, and choose the [fast or full path](#fast-and-full-paths) | `intent/<issue#>-<slug>.md` | Issue form, [`/issue`](skills/issue/README.md) and [`/plan`](skills/plan/README.md) skills |
-| 2 | [Design](skills/design/README.md) | Full path only: turn the approved intent into requirements and design, with a clarify pass to resolve ambiguity. Skipped on the fast path. | `spec/<issue#>-<slug>.md`, decision records | [`/design`](skills/design/README.md) skill |
-| 3 | [Build](skills/build/README.md) | Break the spec (or fast-path intent) into tasks and get the plan approved before coding, then implement one task per PR | `tasks/<issue#>-<slug>.md`, task issues, code | [`/build`](skills/build/README.md) skill |
-| 4 | [Test](skills/test/README.md) | Verify the built work meets every requirement as a whole, with evidence from a fresh-context verifier; add missing acceptance tests and raise issues for failures | `verification/<issue#>-<slug>.md`, acceptance tests, bug issues | [`/test`](skills/test/README.md) skill |
-| 5 | [Deploy](skills/deploy/README.md) | Check readiness and review state, prepare the release, and walk the project's deployment procedure with explicit human approval at every environment | `releases/<issue#>-<slug>.md`, reviewed PRs, release | [`/deploy`](skills/deploy/README.md) skill, `/code-review`, `REVIEW.md` |
-| 6 | [Maintain](skills/maintain/README.md) | Investigate signals from live systems read-only, triage them (fix now, schedule, dismiss), write them back as issues for Plan, and learn from incidents | issues (feed step 1), `incidents/<date>-<slug>.md`, convention updates | [`/maintain`](skills/maintain/README.md) skill, `/issue` |
+| # | Step | Purpose | Output | Mechanisms | Command and when to run it |
+|---|------|---------|--------|------------|------------------------|
+| 0 | [Setup](skills/setup/README.md) | Once per project: record how the code will be built (architecture, testing, conventions) for a new or existing code base | `docs/conventions/`, `docs/decisions/`, `CLAUDE.md` | [`/setup`](skills/setup/README.md) skill, stack profiles | `/setup` once per project, and again when the foundations change |
+| 1 | [Plan](skills/plan/README.md) | Capture the idea, problem and scope, and choose the [fast or full path](#fast-and-full-paths) | `intent/<issue#>-<slug>.md` | Issue form, [`/issue`](skills/issue/README.md) and [`/plan`](skills/plan/README.md) skills | `/issue`, then `/plan <issue>`, when someone has an idea or request |
+| 2 | [Design](skills/design/README.md) | Full path only: turn the approved intent into requirements and design, with a clarify pass to resolve ambiguity. Skipped on the fast path. | `spec/<issue#>-<slug>.md`, decision records | [`/design`](skills/design/README.md) skill | `/design <issue>` when the intent is accepted and on the full path |
+| 3 | [Build](skills/build/README.md) | Break the spec (or fast-path intent) into tasks and get the plan approved before coding, then implement one task per PR | `tasks/<issue#>-<slug>.md`, task issues, code | [`/build`](skills/build/README.md) skill | `/build <issue>` when the spec (or fast-path intent) is accepted |
+| 4 | [Test](skills/test/README.md) | Verify the built work meets every requirement as a whole, with evidence from a fresh-context verifier; add missing acceptance tests and raise issues for failures | `verification/<issue#>-<slug>.md`, acceptance tests, bug issues | [`/test`](skills/test/README.md) skill | `/test <issue>` when the parent issue is labelled `built` |
+| 5 | [Deploy](skills/deploy/README.md) | Check readiness and review state, prepare the release, and walk the project's deployment procedure with explicit human approval at every environment | `releases/<issue#>-<slug>.md`, reviewed PRs, release | [`/deploy`](skills/deploy/README.md) skill, `/code-review`, `REVIEW.md` | `/deploy <issue>` when the parent issue is labelled `verified` |
+| 6 | [Maintain](skills/maintain/README.md) | Investigate signals from live systems read-only, triage them (fix now, schedule, dismiss), write them back as issues for Plan, and learn from incidents | issues (feed step 1), `incidents/<date>-<slug>.md`, convention updates | [`/maintain`](skills/maintain/README.md) skill, `/issue` | `/maintain` when a live system raises a signal. Findings come back through step 1. |
 
 ### Fast and full paths
 
@@ -50,6 +69,8 @@ Later steps read the spec if one exists, otherwise the intent. When in doubt Pla
 
 ### Notes
 
+- Each skill checks its prerequisites and tells you which skill to run if one is missing.
+- Progress shows up as labels on the parent issue: `accepted`, `designed`, `planned`, `built`, `verified`, `released`.
 - Step 0 sits outside the loop. It runs once per project (and again when the foundations change), while steps 1 to 6 run per intent.
 - Maintain closes the loop: its findings become the input to Plan.
 - `CLAUDE.md` plays the role of the project "constitution" from spec-driven development, holding the principles and conventions every step follows.
@@ -76,48 +97,6 @@ Rules of thumb from the playbook:
 - Use `CLAUDE.md` for context every session needs, a skill for guidance that must be applied consistently, and a prompt for one-offs.
 - Use a skill where advisory is enough and a hook where a policy must always hold.
 - Use a subagent for a scoped job within one task, and parallel sessions for independent tasks.
-
-## Installation
-
-The skills ship as a Claude Code plugin named `sdlc`. In Claude Code (2.1.275 or later):
-
-```
-/plugin install sdlc --marketplace carlpaton/sdlc
-```
-
-Or in two steps, on any version:
-
-```
-claude plugin marketplace add carlpaton/sdlc
-claude plugin install sdlc@carlpaton
-```
-
-Update with `claude plugin update sdlc@carlpaton`. Releases are versioned in [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json).
-
-A plugin cannot install the issue forms. Copy [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE) into your project's repo so `/issue` and `/plan` have the forms they follow.
-
-## Usage
-
-The skills live in `skills/`, and each step's README says how it works.
-
-Once per project:
-
-1. `/setup` records the architecture, testing, deployment and operations conventions.
-
-Then for each piece of work, in order:
-
-| Step | Command | Run it when |
-|------|---------|-------------|
-| 1 Plan | `/issue`, then `/plan <issue>` | Someone has an idea or request |
-| 2 Design | `/design <issue>` | The intent is accepted and on the full path |
-| 3 Build | `/build <issue>` | The spec (or fast-path intent) is accepted |
-| 4 Test | `/test <issue>` | The parent issue is labelled `built` |
-| 5 Deploy | `/deploy <issue>` | The parent issue is labelled `verified` |
-| 6 Maintain | `/maintain` | A live system raises a signal. Findings come back through step 1. |
-
-Each skill checks its prerequisites and tells you which skill to run if one is missing.
-
-Progress shows up as labels on the parent issue: `accepted`, `designed`, `planned`, `built`, `verified`, `released`.
 
 ## Sources
 
