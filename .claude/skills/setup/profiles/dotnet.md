@@ -49,6 +49,25 @@ Defaults:
 - `dotnet format` for formatting, with the rules in `.editorconfig`.
 - CI runs build, format check and tests on every PR.
 
+## Deployment
+
+Record in `docs/conventions/deployment.md`. Ask:
+
+1. **Environments.** Which exist and in what order does a release move through them?
+2. **Route.** Does a pipeline deploy, or does a person? What triggers it?
+3. **Approval.** Who approves each environment, and how is production gated?
+4. **Pre-flight.** What must be true before a release: green checks, migrations ready, configuration and secrets in place?
+5. **Post-deploy checks.** How is a release confirmed healthy (health endpoint, smoke test, logs)?
+6. **Rollback.** How is a bad release undone, and which changes (such as database migrations) cannot be reversed?
+7. **Versioning and changelog.** How is a release numbered and described?
+
+Defaults:
+
+- Deploy to a pre-production environment first and confirm it before production.
+- Production requires a named human approval enforced by the pipeline, not only by convention.
+- Rollback means redeploying the previous version. Database changes are written to be backward compatible with it.
+- Each release has a health check and a smoke test, and the release record keeps their output.
+
 ## Enforcement ideas
 
 Not applied by `/setup` in v1. Note them in the conventions so they can be added later:

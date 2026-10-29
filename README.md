@@ -21,7 +21,7 @@ The steps follow Anthropic's AI-native SDLC playbook (see [Sources](#sources)). 
 | 2 | [Design](.claude/skills/design/README.md) | Full path only: turn the approved intent into requirements and design, with a clarify pass to resolve ambiguity. Skipped on the fast path. | `spec/<issue#>-<slug>.md`, decision records | [`/design`](.claude/skills/design/README.md) skill |
 | 3 | [Build](.claude/skills/build/README.md) | Break the spec (or fast-path intent) into tasks and get the plan approved before coding, then implement one task per PR | `tasks/<issue#>-<slug>.md`, task issues, code | [`/build`](.claude/skills/build/README.md) skill |
 | 4 | [Test](.claude/skills/test/README.md) | Verify the built work meets every requirement as a whole, with evidence from a fresh-context verifier; add missing acceptance tests and raise issues for failures | `verification/<issue#>-<slug>.md`, acceptance tests, bug issues | [`/test`](.claude/skills/test/README.md) skill |
-| 5 | Deploy | Layered AI review of PRs, hooks as approval gates, CI/CD that stops at the production gate | reviewed PR, release | _tbd_ |
+| 5 | [Deploy](.claude/skills/deploy/README.md) | Check readiness and review state, prepare the release, and walk the project's deployment procedure with explicit human approval at every environment | `releases/<issue#>-<slug>.md`, reviewed PRs, release | [`/deploy`](.claude/skills/deploy/README.md) skill, `/code-review`, `REVIEW.md` |
 | 6 | Maintain | Trigger Claude from monitoring breaches and scheduled scans; write findings back as new intent | `intent.md` (feeds step 1) | _tbd_ |
 
 ### Fast and full paths

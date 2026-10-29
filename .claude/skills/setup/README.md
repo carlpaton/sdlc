@@ -20,6 +20,7 @@ It decides and records. It does not scaffold code.
 |------|-------|
 | `docs/conventions/architecture.md` | Architecture style and structure |
 | `docs/conventions/testing.md` | What tests look like, where they live, how to run all and one |
+| `docs/conventions/deployment.md` | Environments and order, how a release is made, approvals, pre-flight, post-deploy checks, rollback |
 | `docs/conventions/<other>.md` | Other topics the profile covers |
 | `docs/decisions/NNNN-<slug>.md` | A short record of each significant choice and why |
 | `CLAUDE.md` | Imports the conventions and lists the build, lint and test commands |

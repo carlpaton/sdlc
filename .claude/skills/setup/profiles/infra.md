@@ -61,6 +61,26 @@ Defaults:
 - Shared resource names that applications depend on are listed in one table, and changing one is treated as a breaking change.
 - AI agents may run `terraform plan`, but never `apply` or `destroy`, and never run SQL against a shared environment, without explicit approval for that run.
 
+## Deployment
+
+Record in `docs/conventions/deployment.md`. Ask:
+
+1. **Environments.** Which exist and in what order does a change move through them?
+2. **Route.** Is a change applied by a person from a machine, or by a pipeline?
+3. **Approval.** Who reads the plan and who applies it, for each environment, and how is production gated?
+4. **Pre-flight.** What must be true before an apply: login to the right account or subscription confirmed, plan read in full, state location confirmed, dependent applications informed of any renamed resource?
+5. **Post-deploy checks.** How is a change confirmed: a clean follow-up plan with no drift, the resource visible and healthy, dependent applications still deploying?
+6. **Rollback.** How is a bad change undone (revert the commit and apply again, restore state), and which changes cannot be reversed (deleted data, recreated resources)?
+7. **SQL changes.** Who runs a script against each environment, and in what order?
+
+Defaults:
+
+- Apply to the pre-production environment first, and to production only after it is confirmed.
+- A person applies, after reading the full plan. Agents hand over the reviewed plan and the exact steps, and do not apply.
+- Confirm the active account or subscription before any plan or apply.
+- A follow-up `terraform plan` shows no changes once an apply is done.
+- Rollback is reverting the change and applying again. Anything destructive or irreversible is called out in the plan review.
+
 ## Enforcement ideas
 
 Not applied by `/setup` in v1. Note them in the conventions so they can be added later:
