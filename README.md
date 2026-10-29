@@ -16,7 +16,8 @@ The steps follow Anthropic's AI-native SDLC playbook (see [Sources](#sources)). 
 
 | # | Step | Purpose | Output | Mechanisms |
 |---|------|---------|--------|------------|
-| 1 | Plan | Capture the idea, problem and scope | `intent.md` | _tbd_ |
+| 0 | [Setup](.claude/skills/setup/README.md) | Once per project: record how the code will be built (architecture, testing, conventions) for a new or existing code base | `docs/conventions/`, `docs/decisions/`, `CLAUDE.md` | [`/setup`](.claude/skills/setup/README.md) skill, stack profiles |
+| 1 | [Plan](.claude/skills/plan/README.md) | Capture the idea, problem and scope | `intent/<issue#>-<slug>.md` | Issue form, [`/issue`](.claude/skills/issue/README.md) and [`/plan`](.claude/skills/plan/README.md) skills |
 | 2 | Design | Turn the approved intent into requirements and design, with a clarify pass to resolve ambiguity | `spec.md` | _tbd_ |
 | 3 | Build | Write and review a plan and task breakdown before coding, then implement against it | `plan.md`, code | _tbd_ |
 | 4 | Test | Give Claude a way to verify its own work; run continuous evals in CI | tests, CI evals | _tbd_ |
@@ -25,6 +26,7 @@ The steps follow Anthropic's AI-native SDLC playbook (see [Sources](#sources)). 
 
 ### Notes
 
+- Step 0 sits outside the loop. It runs once per project (and again when the foundations change), while steps 1 to 6 run per intent.
 - Maintain closes the loop: its findings become the input to Plan.
 - `CLAUDE.md` plays the role of the project "constitution" from spec-driven development, holding the principles and conventions every step follows.
 - Open question: whether Test should stay a separate step or fold into Build. Anthropic keeps it separate.

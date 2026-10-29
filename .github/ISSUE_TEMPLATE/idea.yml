@@ -1,0 +1,33 @@
+name: Idea
+description: Request something you want built or changed. This is the intake for the Plan step.
+title: "[Idea] "
+labels: ["idea"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What do you want?
+      description: Describe the outcome in plain language. Rough is fine.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why does it matter?
+      description: The problem it solves or the value it delivers.
+    validations:
+      required: true
+  - type: input
+    id: who
+    attributes:
+      label: Who is it for?
+      description: Users, roles or teams affected.
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Links and context
+      description: Flows, mockups, documents, statements of work, related issues.
+    validations:
+      required: false
