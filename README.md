@@ -7,13 +7,13 @@ Claude Code skills that take a piece of work from idea to production: setup, pla
 The skills ship as a Claude Code plugin named `sdlc`. In Claude Code (2.1.275 or later):
 
 ```
-/plugin install sdlc --marketplace carlpaton/sdlc
+/plugin install sdlc --marketplace carlpaton/skills
 ```
 
 Or in two steps, on any version:
 
 ```
-claude plugin marketplace add carlpaton/sdlc
+claude plugin marketplace add carlpaton/skills
 claude plugin install sdlc@carlpaton
 ```
 
