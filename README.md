@@ -1,12 +1,6 @@
 # SDLC
 
-A reusable, AI-first software development lifecycle (SDLC) template to apply to future projects.
-
-Each step of the lifecycle is driven by [Claude](https://claude.ai/code) tooling (skills, subagents, hooks, MCP and so on, see [Mechanisms](#mechanisms)), so the process can be run consistently from project to project.
-
-## Status
-
-Early stage. Every step (0 to 6) has a first-draft skill, README and template, but none has been run end to end on a real project yet. Expect the skills to change once they are tried. Automation (GitHub Actions, hooks, scheduled runs) is listed as later work in each step's README and is not built.
+Claude Code skills that take a piece of work from idea to production: setup, plan, design, build, test, deploy and maintain. Each step is a skill that writes its result to a committed markdown file, so the next step (and a human reviewer) can pick it up.
 
 ## SDLC steps
 
@@ -34,13 +28,13 @@ Handing work forward is gated by a human approval: a merged PR, a label on the p
 
 | # | Step | Purpose | Output | Mechanisms |
 |---|------|---------|--------|------------|
-| 0 | [Setup](.claude/skills/setup/README.md) | Once per project: record how the code will be built (architecture, testing, conventions) for a new or existing code base | `docs/conventions/`, `docs/decisions/`, `CLAUDE.md` | [`/setup`](.claude/skills/setup/README.md) skill, stack profiles |
-| 1 | [Plan](.claude/skills/plan/README.md) | Capture the idea, problem and scope, and choose the [fast or full path](#fast-and-full-paths) | `intent/<issue#>-<slug>.md` | Issue form, [`/issue`](.claude/skills/issue/README.md) and [`/plan`](.claude/skills/plan/README.md) skills |
-| 2 | [Design](.claude/skills/design/README.md) | Full path only: turn the approved intent into requirements and design, with a clarify pass to resolve ambiguity. Skipped on the fast path. | `spec/<issue#>-<slug>.md`, decision records | [`/design`](.claude/skills/design/README.md) skill |
-| 3 | [Build](.claude/skills/build/README.md) | Break the spec (or fast-path intent) into tasks and get the plan approved before coding, then implement one task per PR | `tasks/<issue#>-<slug>.md`, task issues, code | [`/build`](.claude/skills/build/README.md) skill |
-| 4 | [Test](.claude/skills/test/README.md) | Verify the built work meets every requirement as a whole, with evidence from a fresh-context verifier; add missing acceptance tests and raise issues for failures | `verification/<issue#>-<slug>.md`, acceptance tests, bug issues | [`/test`](.claude/skills/test/README.md) skill |
-| 5 | [Deploy](.claude/skills/deploy/README.md) | Check readiness and review state, prepare the release, and walk the project's deployment procedure with explicit human approval at every environment | `releases/<issue#>-<slug>.md`, reviewed PRs, release | [`/deploy`](.claude/skills/deploy/README.md) skill, `/code-review`, `REVIEW.md` |
-| 6 | [Maintain](.claude/skills/maintain/README.md) | Investigate signals from live systems read-only, triage them (fix now, schedule, dismiss), write them back as issues for Plan, and learn from incidents | issues (feed step 1), `incidents/<date>-<slug>.md`, convention updates | [`/maintain`](.claude/skills/maintain/README.md) skill, `/issue` |
+| 0 | [Setup](skills/setup/README.md) | Once per project: record how the code will be built (architecture, testing, conventions) for a new or existing code base | `docs/conventions/`, `docs/decisions/`, `CLAUDE.md` | [`/setup`](skills/setup/README.md) skill, stack profiles |
+| 1 | [Plan](skills/plan/README.md) | Capture the idea, problem and scope, and choose the [fast or full path](#fast-and-full-paths) | `intent/<issue#>-<slug>.md` | Issue form, [`/issue`](skills/issue/README.md) and [`/plan`](skills/plan/README.md) skills |
+| 2 | [Design](skills/design/README.md) | Full path only: turn the approved intent into requirements and design, with a clarify pass to resolve ambiguity. Skipped on the fast path. | `spec/<issue#>-<slug>.md`, decision records | [`/design`](skills/design/README.md) skill |
+| 3 | [Build](skills/build/README.md) | Break the spec (or fast-path intent) into tasks and get the plan approved before coding, then implement one task per PR | `tasks/<issue#>-<slug>.md`, task issues, code | [`/build`](skills/build/README.md) skill |
+| 4 | [Test](skills/test/README.md) | Verify the built work meets every requirement as a whole, with evidence from a fresh-context verifier; add missing acceptance tests and raise issues for failures | `verification/<issue#>-<slug>.md`, acceptance tests, bug issues | [`/test`](skills/test/README.md) skill |
+| 5 | [Deploy](skills/deploy/README.md) | Check readiness and review state, prepare the release, and walk the project's deployment procedure with explicit human approval at every environment | `releases/<issue#>-<slug>.md`, reviewed PRs, release | [`/deploy`](skills/deploy/README.md) skill, `/code-review`, `REVIEW.md` |
+| 6 | [Maintain](skills/maintain/README.md) | Investigate signals from live systems read-only, triage them (fix now, schedule, dismiss), write them back as issues for Plan, and learn from incidents | issues (feed step 1), `incidents/<date>-<slug>.md`, convention updates | [`/maintain`](skills/maintain/README.md) skill, `/issue` |
 
 ### Fast and full paths
 
@@ -52,7 +46,7 @@ Not every change needs a separate design. Plan decides which path a piece of wor
 | Steps | 0 once, then 1, 3, 4, 5, 6 | 0 once, then 1, 2, 3, 4, 5, 6 |
 | Spec | The intent itself, plus acceptance criteria | `spec/<issue#>-<slug>.md` from Design |
 
-Later steps read the spec if one exists, otherwise the intent. When in doubt Plan chooses full, and the product owner can change the path in the PR. See the [Plan README](.claude/skills/plan/README.md#fast-and-full-paths) for the criteria.
+Later steps read the spec if one exists, otherwise the intent. When in doubt Plan chooses full, and the product owner can change the path in the PR. See the [Plan README](skills/plan/README.md#fast-and-full-paths) for the criteria.
 
 ### Notes
 
@@ -83,9 +77,28 @@ Rules of thumb from the playbook:
 - Use a skill where advisory is enough and a hook where a policy must always hold.
 - Use a subagent for a scoped job within one task, and parallel sessions for independent tasks.
 
+## Installation
+
+The skills ship as a Claude Code plugin named `sdlc`. In Claude Code (2.1.275 or later):
+
+```
+/plugin install sdlc --marketplace carlpaton/sdlc
+```
+
+Or in two steps, on any version:
+
+```
+claude plugin marketplace add carlpaton/sdlc
+claude plugin install sdlc@carlpaton
+```
+
+Update with `claude plugin update sdlc@carlpaton`. Releases are versioned in [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json).
+
+A plugin cannot install the issue forms. Copy [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE) into your project's repo so `/issue` and `/plan` have the forms they follow.
+
 ## Usage
 
-The skills live in `.claude/skills/`, and each step's README says how it works. Adopting the template in a project means getting those skills and the `.github/ISSUE_TEMPLATE/` forms into that project's repo. How to distribute them (copying, or packaging as a plugin) is not decided yet.
+The skills live in `skills/`, and each step's README says how it works.
 
 Once per project:
 

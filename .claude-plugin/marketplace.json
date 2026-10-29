@@ -1,0 +1,17 @@
+{
+  "name": "carlpaton",
+  "owner": {
+    "name": "Carl Paton",
+    "url": "https://github.com/carlpaton"
+  },
+  "description": "Carl Paton's Claude Code skills, as an installable plugin.",
+  "plugins": [
+    {
+      "name": "sdlc",
+      "source": "./",
+      "description": "A reusable, AI-first SDLC: setup, plan, design, build, test, deploy and maintain.",
+      "category": "workflow",
+      "keywords": ["sdlc", "workflow", "planning", "spec-driven"]
+    }
+  ]
+}

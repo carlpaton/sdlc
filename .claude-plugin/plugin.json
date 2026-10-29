@@ -1,0 +1,12 @@
+{
+  "name": "sdlc",
+  "version": "0.1.0",
+  "description": "A reusable, AI-first software development lifecycle: setup, plan, design, build, test, deploy and maintain, each driven by a skill and handed off through committed markdown files.",
+  "author": {
+    "name": "Carl Paton",
+    "url": "https://github.com/carlpaton"
+  },
+  "repository": "https://github.com/carlpaton/sdlc",
+  "license": "MIT",
+  "keywords": ["sdlc", "workflow", "planning", "spec-driven", "testing", "deployment"]
+}
